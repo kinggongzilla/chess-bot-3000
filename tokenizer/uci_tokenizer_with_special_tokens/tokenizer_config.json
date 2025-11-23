@@ -1,0 +1,75 @@
+{
+  "added_tokens_decoder": {
+    "0": {
+      "content": "[UNK]",
+      "lstrip": false,
+      "normalized": false,
+      "rstrip": false,
+      "single_word": false,
+      "special": true
+    },
+    "1": {
+      "content": "[PAD]",
+      "lstrip": false,
+      "normalized": false,
+      "rstrip": false,
+      "single_word": false,
+      "special": true
+    },
+    "2": {
+      "content": "<WHITE_WIN>",
+      "lstrip": false,
+      "normalized": false,
+      "rstrip": false,
+      "single_word": false,
+      "special": true
+    },
+    "3": {
+      "content": "<BLACK_WIN>",
+      "lstrip": false,
+      "normalized": false,
+      "rstrip": false,
+      "single_word": false,
+      "special": true
+    },
+    "4": {
+      "content": "<DRAW>",
+      "lstrip": false,
+      "normalized": false,
+      "rstrip": false,
+      "single_word": false,
+      "special": true
+    },
+    "4613": {
+      "content": "<BOG>",
+      "lstrip": false,
+      "normalized": false,
+      "rstrip": false,
+      "single_word": false,
+      "special": true
+    },
+    "4614": {
+      "content": "<EOG>",
+      "lstrip": false,
+      "normalized": false,
+      "rstrip": false,
+      "single_word": false,
+      "special": true
+    }
+  },
+  "additional_special_tokens": [
+    "<BOG>",
+    "<EOG>"
+  ],
+  "bos_token": "<BOG>",
+  "clean_up_tokenization_spaces": false,
+  "eos_token": "<EOG>",
+  "extra_special_tokens": {},
+  "max_length": null,
+  "model_max_length": 1000000000000000019884624838656,
+  "pad_to_multiple_of": null,
+  "pad_token": "[PAD]",
+  "pad_token_type_id": 0,
+  "padding_side": "right",
+  "tokenizer_class": "PreTrainedTokenizerFast"
+}
