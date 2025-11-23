@@ -48,7 +48,7 @@ def pgn_to_uci(movetext):
 
 def process_parquet_file(args):
     """
-    Process a single parquet file: add movetext_preprocessed column.
+    Process a single parquet file: add movetext_uci column.
     
     Args:
         args: Tuple of (input_path, output_path)
@@ -61,15 +61,18 @@ def process_parquet_file(args):
     try:
         # Read the parquet file
         df = pd.read_parquet(input_path)
-        
+
         # Convert movetext to UCI notation
-        df['movetext_preprocessed'] = df['movetext'].apply(pgn_to_uci)
-        
+        df['movetext_uci'] = df['movetext'].apply(pgn_to_uci)
+
+        # Create a new DataFrame with only the movetext_uci column
+        df_out = df[['movetext_uci']].copy()
+
         # Save to output path
-        df.to_parquet(output_path, index=False)
-        
+        df_out.to_parquet(output_path, index=False)
+
         return (True, str(input_path), None)
-    
+
     except Exception as e:
         return (False, str(input_path), str(e))
 

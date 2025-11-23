@@ -30,7 +30,7 @@ data_stages:
       hf_dataset_config_name: null
       hf_dataset_or_datasets: ../data/lichess_data/data_processed
       hf_dataset_splits: train
-      text_column_name: movetext_preprocessed
+      text_column_name: movetext_uci
     num_loading_workers: 1
     seed: 42
   name: Stable Training Stage
