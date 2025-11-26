@@ -9,79 +9,23 @@ from concurrent.futures import ProcessPoolExecutor
 import multiprocessing
 
 
-# Mapping from PGN result notation to special tokens
-RESULT_TO_TOKEN = {
-    "1-0": "<WHITE_WIN>",
-    "0-1": "<BLACK_WIN>",
-    "1/2-1/2": "<DRAW>",
-}
-
-# Default Elo rating when not available or invalid
-DEFAULT_ELO = 1500
-
-# Valid Elo range
-MIN_ELO = 0
-MAX_ELO = 3500
-
-
-def elo_to_token(elo, color):
+def pgn_to_uci(movetext):
     """
-    Convert an Elo rating to a token, rounding to the nearest 100.
-    
-    Args:
-        elo: Elo rating (int, float, or string)
-        color: "WHITE" or "BLACK"
-    
-    Returns:
-        Token string like "<WHITE:1500>" or "<BLACK:2000>"
-    """
-    try:
-        elo_value = int(float(elo))
-        # Round to nearest 100
-        rounded_elo = round(elo_value / 100) * 100
-        # Clamp to valid range
-        rounded_elo = max(MIN_ELO, min(MAX_ELO, rounded_elo))
-    except (ValueError, TypeError):
-        # Use default if conversion fails
-        rounded_elo = DEFAULT_ELO
-    
-    return f"<{color}:{rounded_elo}>"
-
-
-def pgn_to_uci(movetext, result, white_elo, black_elo):
-    """
-    Convert PGN movetext to UCI notation with BOG/EOG tokens, result token, and Elo tokens.
+    Convert PGN movetext to UCI notation with BOG/EOG tokens.
     
     Args:
         movetext: PGN format moves (e.g., "1. e4 e5 2. Nf3 Nc6")
-        result: Game result (e.g., "1-0", "0-1", "1/2-1/2")
-        white_elo: White player's Elo rating
-        black_elo: Black player's Elo rating
     
     Returns:
-        UCI format moves with tokens 
-        (e.g., "<BOG> <WHITE:1500> <BLACK:1600> <WHITE_WIN> e2e4 e7e5 g1f3 b8c6 <EOG>")
+        UCI format moves with tokens (e.g., "<BOG> e2e4 e7e5 g1f3 b8c6 <EOG>")
     """
-    # Get result token, default to empty string if unknown result
-    result_token = RESULT_TO_TOKEN.get(result, "")
-    
-    # Get Elo tokens
-    white_elo_token = elo_to_token(white_elo, "WHITE")
-    black_elo_token = elo_to_token(black_elo, "BLACK")
-    
-    # Build prefix: <BOG> <WHITE:elo> <BLACK:elo> [<result>]
-    prefix_parts = ["<BOG>", white_elo_token, black_elo_token]
-    if result_token:
-        prefix_parts.append(result_token)
-    prefix = " ".join(prefix_parts)
-    
     try:
         # Create a game from the movetext
         pgn = StringIO(movetext)
         game = chess.pgn.read_game(pgn)
         
         if game is None:
-            return f"{prefix} <EOG>"
+            return "<BOG> <EOG>"
         
         # Extract UCI moves
         board = game.board()
@@ -91,15 +35,15 @@ def pgn_to_uci(movetext, result, white_elo, black_elo):
             uci_moves.append(move.uci())
             board.push(move)
         
-        # Build output
+        # Add BOG and EOG tokens
         if uci_moves:
-            return f"{prefix} " + " ".join(uci_moves) + " <EOG>"
+            return "<BOG> " + " ".join(uci_moves) + " <EOG>"
         else:
-            return f"{prefix} <EOG>"
+            return "<BOG> <EOG>"
     
     except Exception as e:
-        # Return tokens if parsing fails
-        return f"{prefix} <EOG>"
+        # Return empty tokens if parsing fails
+        return "<BOG> <EOG>"
 
 
 def process_parquet_file(args):
@@ -118,16 +62,8 @@ def process_parquet_file(args):
         # Read the parquet file
         df = pd.read_parquet(input_path)
 
-        # Convert movetext to UCI notation, passing result and Elo columns
-        df['movetext_uci'] = df.apply(
-            lambda row: pgn_to_uci(
-                row['movetext'], 
-                row['Result'],
-                row.get('WhiteElo', DEFAULT_ELO),
-                row.get('BlackElo', DEFAULT_ELO)
-            ), 
-            axis=1
-        )
+        # Convert movetext to UCI notation
+        df['movetext_uci'] = df['movetext'].apply(pgn_to_uci)
 
         # Create a new DataFrame with only the movetext_uci column
         df_out = df[['movetext_uci']].copy()

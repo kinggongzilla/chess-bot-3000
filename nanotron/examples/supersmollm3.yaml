@@ -86,7 +86,7 @@ model:
     sliding_window_size: null
     tie_word_embeddings: true
     use_cache: true
-    vocab_size: 4615
+    vocab_size: 4687
     z_loss_coefficient: 1.0e-05
     z_loss_enabled: false
     no_rope_layer: 1          # Reduced from 4
