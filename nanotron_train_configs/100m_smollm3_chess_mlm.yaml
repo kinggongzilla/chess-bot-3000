@@ -1,7 +1,7 @@
 checkpoints:
-  checkpoint_interval: 1000
-  checkpoints_path: checkpoints
-  checkpoints_path_is_shared_file_system: false
+  checkpoint_interval: 100000
+  checkpoints_path: checkpoints/smollm3-100m-chess
+  checkpoints_path_is_shared_file_system: true  # Shared filesystem on HPC
   load_lr_scheduler: true
   load_optimizer: true
   resume_checkpoint_path: null
@@ -12,12 +12,12 @@ data_stages:
 - data:
     dataset:
       dataset_overwrite_cache: false
-      dataset_processing_num_proc_per_process: 1
+      dataset_processing_num_proc_per_process: 4
       hf_dataset_config_name: null
       hf_dataset_or_datasets: ../data/lichess_data/data_processed
       hf_dataset_splits: train
       text_column_name: movetext_uci
-    num_loading_workers: 1
+    num_loading_workers: 4
     seed: 42
   name: stable
   sequence_length: 512
@@ -27,8 +27,8 @@ general:
   benchmark_csv_path: null
   consumed_train_samples: null
   ignore_sanity_checks: true
-  project: smollm3-tiny-chess
-  run: tiny_smollm3_chess-1
+  project: chess-bot-3000
+  run: 100m-test
   seed: 42
   step: null
 
@@ -38,7 +38,7 @@ logging:
   log_level_replica: info
 
 model:
-  ddp_bucket_cap_mb: 25
+  ddp_bucket_cap_mb: 50
   dtype: bfloat16
   init_method:
     std: 0.02
@@ -54,15 +54,15 @@ model:
     eos_token_id: 4614
     flex_attention_mask: null
     hidden_act: silu
-    hidden_size: 256          # Much smaller than 2048
+    hidden_size: 768
     initializer_range: 0.02
-    intermediate_size: 1024   # Much smaller than 11008
+    intermediate_size: 3072
     is_qwen2_config: true
-    max_position_embeddings: 512  # Smaller context
+    max_position_embeddings: 512
     moe_config: null
-    num_attention_heads: 8    # Reduced from 16
-    num_hidden_layers: 4      # Much fewer than 36
-    num_key_value_heads: 2    # Reduced from 4
+    num_attention_heads: 8
+    num_hidden_layers: 12
+    num_key_value_heads: 2
     pad_token_id: 4098
     pretraining_tp: 1
     rms_norm_eps: 1.0e-06
@@ -75,19 +75,19 @@ model:
     vocab_size: 4687
     z_loss_coefficient: 1.0e-05
     z_loss_enabled: false
-    no_rope_layer: 1          # Reduced from 4
+    no_rope_layer: 1
 
 optimizer:
   accumulate_grad_in_fp32: true
   clip_grad: 1.0
   learning_rate_scheduler:
-    learning_rate: 0.0003
+    learning_rate: 0.0006          # Higher LR for smaller model
     lr_decay_starting_step: null
-    lr_decay_steps: 13
+    lr_decay_steps: 95000          # ~95% of training
     lr_decay_style: cosine
-    lr_warmup_steps: 2
+    lr_warmup_steps: 2000          # ~2% warmup
     lr_warmup_style: linear
-    min_decay_lr: 1.0e-05
+    min_decay_lr: 6.0e-05          # 10% of peak LR
   optimizer_factory:
     adam_beta1: 0.9
     adam_beta2: 0.95
@@ -101,12 +101,13 @@ optimizer:
 
 parallelism:
   context_parallel_size: 1
-  dp: 1
+  dp: 1                            # Data parallel across 4 GPUs
   expert_parallel_size: 1
-  pp: 1
+  moe_layer_recompute: false
+  pp: 1                            # No pipeline parallelism needed for 100M
   pp_engine: 1f1b
   recompute_layer: false
-  tp: 1
+  tp: 1                            # No tensor parallelism needed for 100M
   tp_linear_async_communication: true
   tp_mode: REDUCE_SCATTER
   tp_recompute_allgather: true
@@ -118,18 +119,18 @@ tokenizer:
   tokenizer_name_or_path: ../tokenizer/uci_tokenizer_with_special_tokens
   tokenizer_revision: null
 
-metrics_logging: 
+metrics_logging:
   log_level: 1
   log_detail_interval: 200
 
 tokens:
-  batch_accumulation_per_replica: 1
+  batch_accumulation_per_replica: 8    # Effective batch = 4 GPUs × 32 micro × 8 accum = 1024
   limit_test_batches: 0
-  limit_val_batches: 10       # Small validation set
-  micro_batch_size: 2
-  sequence_length: 512        # Shorter sequences
-  train_steps: 1000             # Just for quick testing
-  val_check_interval: 10
+  limit_val_batches: 50
+  micro_batch_size: 32                 # Per GPU, adjust based on VRAM
+  sequence_length: 512
+  train_steps: 10                  # Adjust based on your data
+  val_check_interval: 1000
 
 lighteval: null
 
