@@ -124,12 +124,12 @@ metrics_logging:
   log_detail_interval: 200
 
 tokens:
-  batch_accumulation_per_replica: 8    # Effective batch = 4 GPUs × 32 micro × 8 accum = 1024
+  batch_accumulation_per_replica: 4    # Effective batch = num GPUs × micro × 8 accum = 1024
   limit_test_batches: 0
   limit_val_batches: 50
   micro_batch_size: 64                 # Per GPU, adjust based on VRAM
   sequence_length: 512
-  train_steps: 1000000                  # Adjust based on your data
+  train_steps: 13200                  # Adjust based on your data
   val_check_interval: 1000
 
 lighteval: null
