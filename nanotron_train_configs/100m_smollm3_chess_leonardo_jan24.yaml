@@ -1,5 +1,5 @@
 checkpoints:
-  checkpoint_interval: 5000
+  checkpoint_interval: 1000
   checkpoints_path: checkpoints/smollm3-100m-chess
   checkpoints_path_is_shared_file_system: true  # Shared filesystem on HPC
   load_lr_scheduler: true
