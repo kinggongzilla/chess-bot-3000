@@ -5,7 +5,7 @@
     "strategy": "BatchLongest",
     "direction": "Right",
     "pad_to_multiple_of": null,
-    "pad_id": 0,
+    "pad_id": 1,
     "pad_type_id": 0,
     "pad_token": "[PAD]"
   },

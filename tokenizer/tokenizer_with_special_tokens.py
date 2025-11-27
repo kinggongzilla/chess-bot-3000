@@ -1,4 +1,6 @@
 from transformers import AutoTokenizer
+import json
+
 
 # Load the tokenizer
 tokenizer = AutoTokenizer.from_pretrained("nsarrazin/chessformer")
@@ -6,6 +8,7 @@ tokenizer = AutoTokenizer.from_pretrained("nsarrazin/chessformer")
 # Define special tokens
 bog_token = "<BOG>"
 eog_token = "<EOG>"
+pad_token = "[PAD]"
 white_win_token = "<WHITE_WIN>"
 black_win_token = "<BLACK_WIN>"
 draw_token = "<DRAW>"
@@ -32,15 +35,27 @@ print(f"Added {num_added} special tokens")
 # Explicitly set bos_token and eos_token
 tokenizer.bos_token = bog_token
 tokenizer.eos_token = eog_token
+tokenizer.pad_token = pad_token
 
 # Save the modified tokenizer locally
 tokenizer.save_pretrained("./uci_tokenizer_with_special_tokens")
 
+#fix pad_token_id in tokenizer.json After saving the tokenizer
+with open("./uci_tokenizer_with_special_tokens/tokenizer.json", "r") as f:
+    tok_json = json.load(f)
+
+tok_json["padding"]["pad_id"] = tokenizer.pad_token_id  # Should be 1
+
+with open("./uci_tokenizer_with_special_tokens/tokenizer.json", "w") as f:
+    json.dump(tok_json, f, indent=2)
+
 # Verify
 print(f"BOS token: {tokenizer.bos_token} (id: {tokenizer.bos_token_id})")
 print(f"EOS token: {tokenizer.eos_token} (id: {tokenizer.eos_token_id})")
+print(f"PAD token: {tokenizer.pad_token} (id: {tokenizer.pad_token_id})")
 print(f"BOG token ID: {tokenizer.convert_tokens_to_ids(bog_token)}")
 print(f"EOG token ID: {tokenizer.convert_tokens_to_ids(eog_token)}")
+print(f"Pad token ID: {tokenizer.convert_tokens_to_ids(pad_token)}")
 print(f"WHITE_WIN token ID: {tokenizer.convert_tokens_to_ids(white_win_token)}")
 print(f"BLACK_WIN token ID: {tokenizer.convert_tokens_to_ids(black_win_token)}")
 print(f"DRAW token ID: {tokenizer.convert_tokens_to_ids(draw_token)}")

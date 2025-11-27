@@ -63,7 +63,7 @@ model:
     num_attention_heads: 8
     num_hidden_layers: 12
     num_key_value_heads: 2
-    pad_token_id: 4098
+    pad_token_id: 1
     pretraining_tp: 1
     rms_norm_eps: 1.0e-06
     rope_interleaved: false

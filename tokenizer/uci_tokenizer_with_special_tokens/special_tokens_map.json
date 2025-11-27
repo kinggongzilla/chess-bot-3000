@@ -542,11 +542,5 @@
   ],
   "bos_token": "<BOG>",
   "eos_token": "<EOG>",
-  "pad_token": {
-    "content": "[PAD]",
-    "lstrip": false,
-    "normalized": false,
-    "rstrip": false,
-    "single_word": false
-  }
+  "pad_token": "[PAD]"
 }
