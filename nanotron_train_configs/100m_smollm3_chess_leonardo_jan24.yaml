@@ -12,12 +12,12 @@ data_stages:
 - data:
     dataset:
       dataset_overwrite_cache: false
-      dataset_processing_num_proc_per_process: 4
+      dataset_processing_num_proc_per_process: 8
       hf_dataset_config_name: null
       hf_dataset_or_datasets: /leonardo_scratch/large/userexternal/dhauser0/lichess/lichess_data/data_processed/year=2024/month=01
       hf_dataset_splits: train
       text_column_name: movetext_uci
-    num_loading_workers: 4
+    num_loading_workers: 6
     seed: 42
   name: stable
   sequence_length: 512
