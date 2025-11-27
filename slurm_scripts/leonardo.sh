@@ -15,6 +15,10 @@ source nanotron_env/bin/activate
 
 export HF_HOME="/leonardo_work/EUHPC_D18_005/david/hf-datasets-cache"
 
+# hopefully avoids timeout error after loading data shards
+export NCCL_TIMEOUT=7200000
+export TORCH_NCCL_HEARTBEAT_TIMEOUT_SEC=7200
+
 wandb enabled
 wandb offline
 
