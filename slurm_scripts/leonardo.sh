@@ -19,4 +19,7 @@ export WANDB_MODE=offline
 
 cd nanotron
 
+wandb enabled
+wandb offline
+
 CUDA_DEVICE_MAX_CONNECTIONS=1 torchrun --nproc_per_node=4 run_train.py --config-file /leonardo_scratch/fast/EUHPC_D18_005/david/chess-bot-3000/nanotron_train_configs/100m_smollm3_chess_leonardo_jan24.yaml
