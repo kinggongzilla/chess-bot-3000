@@ -20,7 +20,7 @@ data_stages:
     num_loading_workers: 6
     seed: 42
   name: stable
-  sequence_length: 512
+  sequence_length: 256
   start_training_step: 1
 
 general:
@@ -58,7 +58,7 @@ model:
     initializer_range: 0.02
     intermediate_size: 3072
     is_qwen2_config: true
-    max_position_embeddings: 512
+    max_position_embeddings: 256
     moe_config: null
     num_attention_heads: 8
     num_hidden_layers: 12
