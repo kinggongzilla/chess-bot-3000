@@ -1,5 +1,5 @@
 checkpoints:
-  checkpoint_interval: 100
+  checkpoint_interval: 4000
   checkpoints_path: /leonardo_scratch/fast/EUHPC_D18_005/david/chess-bot-3000/nanotron/checkpoints/smollm3-100m-chess
   checkpoints_path_is_shared_file_system: true  # Shared filesystem on HPC
   load_lr_scheduler: true
@@ -97,7 +97,7 @@ optimizer:
   weight_decay: 0.1
   weight_decay_exclude_named_params:
   - .*token_embedding.*
-  zero_stage: 0
+  zero_stage: 1
 
 parallelism:
   context_parallel_size: 1
