@@ -78,7 +78,7 @@ model:
     no_rope_layer: 1
 
 optimizer:
-  accumulate_grad_in_fp32: true
+  accumulate_grad_in_fp32: false
   clip_grad: 1.0
   learning_rate_scheduler:
     learning_rate: 0.0006          # Higher LR for smaller model
