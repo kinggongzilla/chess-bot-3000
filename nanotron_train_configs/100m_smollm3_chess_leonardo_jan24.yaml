@@ -101,7 +101,7 @@ optimizer:
 
 parallelism:
   context_parallel_size: 1
-  dp: 4                            # Data parallel across 4 GPUs
+  dp: 1                            # Data parallel across 1 GPUs
   expert_parallel_size: 1
   moe_layer_recompute: false
   pp: 1                            # No pipeline parallelism needed for 100M
