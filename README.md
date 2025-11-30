@@ -1,6 +1,8 @@
 # chess-bot-3000
 
-A language model trained from scratch on chess games to learn chess-specific patterns and strategies. This project uses the Nanotron framework to train a 100M parameter SmolLM3-based model on Lichess game data.
+A language model trained from scratch on chess games to learn chess-specific patterns and strategies. This project uses the Nanotron framework to train a SmolLM3-based model on Lichess game data.
+
+Try the model with huggingface: https://huggingface.co/daavidhauser/chess-bot-3000-100m
 
 ## Overview
 
@@ -8,14 +10,13 @@ This project trains a transformer language model on chess games represented in U
 
 ## Key Features
 
-- **Model Architecture**: 100M parameter Qwen2-style transformer (12 layers, 768 hidden size, 8 attention heads)
-- **Custom Tokenizer**: Based on nsarrazin/chessformer with special tokens for:
+- **Model Architecture**: 100M & 250m parameter Qwen2-style transformer. Can be changed in the yaml files in `/nanotron_train_configs/` directory
+- **UCI notation Tokenizer**: A tokenizer for chess moves in UCI notation including the following special tokens:
   - Game boundaries: `<BOG>` (beginning of game), `<EOG>` (end of game)
   - Player Elo ratings: `<WHITE:1500>`, `<BLACK:2000>`, etc. (0-3500 in 100-point increments)
   - Game outcomes: `<WHITE_WIN>`, `<BLACK_WIN>`, `<DRAW>`
 - **Training Data**: Lichess game database in UCI notation format
-- **Framework**: Nanotron with distributed training support (PyTorch, FSDP)
-- **Hardware**: Optimized for HPC environments with multi-GPU support
+- **Framework**: Nanotron with distributed training support
 
 ## Project Structure
 
@@ -44,7 +45,6 @@ chess-bot-3000/
 - Python 3.11+
 - CUDA-capable GPU(s)
 - 64GB+ RAM recommended for data preprocessing
-- Access to Lichess database (for training data)
 
 ### Installation
 
@@ -116,20 +116,6 @@ torchrun --nproc_per_node=4 run_train.py \
   --config-file ../nanotron_train_configs/100m_smollm3_chess_leonardo_jan24.yaml
 ```
 
-### HPC Training (SLURM)
-
-For training on HPC systems like Leonardo:
-
-```bash
-sbatch slurm_scripts/leonardo.sh
-```
-
-The SLURM script is configured for:
-- 4 GPUs on a single node
-- 48-hour time limit
-- Data parallel training (DP=4)
-- Automatic checkpoint saving every 100 steps
-
 ### Training Configuration
 
 Key hyperparameters (see `nanotron_train_configs/100m_smollm3_chess_leonardo_jan24.yaml`):
@@ -141,79 +127,3 @@ Key hyperparameters (see `nanotron_train_configs/100m_smollm3_chess_leonardo_jan
 - **Total steps**: 26,400
 - **Optimizer**: AdamW (β₁=0.9, β₂=0.95, weight decay=0.1)
 - **Precision**: bfloat16
-
-## Model Details
-
-### Architecture
-
-- **Base model**: SmolLM3-100M architecture (Qwen2-style)
-- **Parameters**: ~100M
-- **Layers**: 12 transformer blocks
-- **Hidden size**: 768
-- **Attention heads**: 8 (2 KV heads for GQA)
-- **Intermediate size**: 3072
-- **Vocabulary size**: 4687 tokens
-- **Max sequence length**: 256 tokens
-
-### Special Features
-
-- Flash Attention 2 for efficient training
-- Grouped Query Attention (GQA)
-- Fused RMS normalization and rotary embeddings
-- Document masking for multi-game batches
-- Z-loss for training stability
-
-## Tokenizer
-
-The custom tokenizer is based on `nsarrazin/chessformer` with added special tokens:
-
-- **Chess moves**: Standard UCI format (e.g., `e2e4`, `e7e5`, `e1g1` for castling)
-- **Game structure**: `<BOG>`, `<EOG>`, `[PAD]`
-- **Elo tokens**: 72 tokens for player ratings (`<WHITE:0>` to `<WHITE:3500>`, `<BLACK:0>` to `<BLACK:3500>`)
-- **Outcome tokens**: `<WHITE_WIN>`, `<BLACK_WIN>`, `<DRAW>`
-
-## Monitoring
-
-Training progress is logged to Weights & Biases (wandb):
-
-- Project: `chess-bot-3000`
-- Run name: `100m-jan24`
-- Metrics: loss, perplexity, learning rate, throughput
-
-## Checkpoints
-
-Checkpoints are saved every 100 steps to:
-```
-nanotron/checkpoints/smollm3-100m-chess/
-```
-
-Each checkpoint includes:
-- Model weights
-- Optimizer state
-- Training metadata
-- Config files
-
-## Future Work
-
-- Evaluate model on chess puzzles and game completion tasks
-- Experiment with larger model sizes (300M, 1B parameters)
-- Fine-tune for specific chess styles or openings
-- Add support for chess variants (Fischer Random, etc.)
-- Implement reinforcement learning from self-play
-
-## References
-
-- Nanotron: https://github.com/huggingface/nanotron
-- Lichess Database: https://database.lichess.org/
-- Chessformer: https://huggingface.co/nsarrazin/chessformer
-- UCI Protocol: https://www.chessprogramming.org/UCI
-
-## License
-
-[Add your license here]
-
-## Acknowledgments
-
-- Lichess for providing open chess game data
-- HuggingFace for the Nanotron training framework
-- CINECA for computational resources on Leonardo supercomputer
