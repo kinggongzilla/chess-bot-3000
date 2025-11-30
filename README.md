@@ -4,6 +4,8 @@ A language model trained from scratch on chess games to learn chess-specific pat
 
 Try the model with huggingface: https://huggingface.co/daavidhauser/chess-bot-3000-100m
 
+*Disclaimer*: The documentation in this readme is LLM generated and may contain mistakes.
+
 ## Overview
 
 This project trains a transformer language model on chess games represented in UCI (Universal Chess Interface) notation. The model learns to predict chess moves given game context, including player Elo ratings and game outcomes.
