@@ -1,1 +1,4 @@
 data/lichess_data
+hf_model_chess_100m
+.vscode
+converted_models/smollm3-250m-chess-hf

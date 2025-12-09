@@ -1,0 +1,164 @@
+{
+  "configuration": {
+    "bot_elo": 3000,
+    "start_elo": 1500,
+    "end_elo": 3000,
+    "elo_step": 100,
+    "games_per_level": 20,
+    "model_path": "converted_models/smollm3-250m-chess-hf",
+    "stockfish_path": "/usr/games/stockfish"
+  },
+  "results_by_elo": {
+    "1500": {
+      "wins": 5,
+      "losses": 14,
+      "draws": 1,
+      "total_games": 20,
+      "win_rate": 25.0,
+      "loss_rate": 70.0,
+      "draw_rate": 5.0
+    },
+    "1600": {
+      "wins": 1,
+      "losses": 19,
+      "draws": 0,
+      "total_games": 20,
+      "win_rate": 5.0,
+      "loss_rate": 95.0,
+      "draw_rate": 0.0
+    },
+    "1700": {
+      "wins": 2,
+      "losses": 18,
+      "draws": 0,
+      "total_games": 20,
+      "win_rate": 10.0,
+      "loss_rate": 90.0,
+      "draw_rate": 0.0
+    },
+    "1800": {
+      "wins": 2,
+      "losses": 17,
+      "draws": 1,
+      "total_games": 20,
+      "win_rate": 10.0,
+      "loss_rate": 85.0,
+      "draw_rate": 5.0
+    },
+    "1900": {
+      "wins": 0,
+      "losses": 19,
+      "draws": 1,
+      "total_games": 20,
+      "win_rate": 0.0,
+      "loss_rate": 95.0,
+      "draw_rate": 5.0
+    },
+    "2000": {
+      "wins": 3,
+      "losses": 16,
+      "draws": 1,
+      "total_games": 20,
+      "win_rate": 15.0,
+      "loss_rate": 80.0,
+      "draw_rate": 5.0
+    },
+    "2100": {
+      "wins": 2,
+      "losses": 18,
+      "draws": 0,
+      "total_games": 20,
+      "win_rate": 10.0,
+      "loss_rate": 90.0,
+      "draw_rate": 0.0
+    },
+    "2200": {
+      "wins": 2,
+      "losses": 17,
+      "draws": 1,
+      "total_games": 20,
+      "win_rate": 10.0,
+      "loss_rate": 85.0,
+      "draw_rate": 5.0
+    },
+    "2300": {
+      "wins": 1,
+      "losses": 19,
+      "draws": 0,
+      "total_games": 20,
+      "win_rate": 5.0,
+      "loss_rate": 95.0,
+      "draw_rate": 0.0
+    },
+    "2400": {
+      "wins": 1,
+      "losses": 19,
+      "draws": 0,
+      "total_games": 20,
+      "win_rate": 5.0,
+      "loss_rate": 95.0,
+      "draw_rate": 0.0
+    },
+    "2500": {
+      "wins": 1,
+      "losses": 19,
+      "draws": 0,
+      "total_games": 20,
+      "win_rate": 5.0,
+      "loss_rate": 95.0,
+      "draw_rate": 0.0
+    },
+    "2600": {
+      "wins": 0,
+      "losses": 19,
+      "draws": 1,
+      "total_games": 20,
+      "win_rate": 0.0,
+      "loss_rate": 95.0,
+      "draw_rate": 5.0
+    },
+    "2700": {
+      "wins": 0,
+      "losses": 20,
+      "draws": 0,
+      "total_games": 20,
+      "win_rate": 0.0,
+      "loss_rate": 100.0,
+      "draw_rate": 0.0
+    },
+    "2800": {
+      "wins": 0,
+      "losses": 20,
+      "draws": 0,
+      "total_games": 20,
+      "win_rate": 0.0,
+      "loss_rate": 100.0,
+      "draw_rate": 0.0
+    },
+    "2900": {
+      "wins": 0,
+      "losses": 19,
+      "draws": 1,
+      "total_games": 20,
+      "win_rate": 0.0,
+      "loss_rate": 95.0,
+      "draw_rate": 5.0
+    },
+    "3000": {
+      "wins": 0,
+      "losses": 20,
+      "draws": 0,
+      "total_games": 20,
+      "win_rate": 0.0,
+      "loss_rate": 100.0,
+      "draw_rate": 0.0
+    }
+  },
+  "summary": {
+    "elo_range": [
+      1500,
+      3000
+    ],
+    "total_levels": 16
+  }
+}
