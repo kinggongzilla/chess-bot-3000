@@ -2,7 +2,9 @@
 
 A language model trained from scratch on chess games to learn chess-specific patterns and strategies. This project uses the Nanotron framework to train a SmolLM3-based model on Lichess game data.
 
-Try the model with huggingface: https://huggingface.co/daavidhauser/chess-bot-3000-100m
+Try the model with huggingface: 
+100m: https://huggingface.co/daavidhauser/chess-bot-3000-100m
+250m: https://huggingface.co/daavidhauser/chess-bot-3000-250m
 
 *Disclaimer*: The documentation in this readme is LLM generated and may contain mistakes.
 
